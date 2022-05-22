@@ -1,7 +1,30 @@
 extends layout
 
 block content
-  h1= title
+  h1.center= title
 
-  a(href="/categories") دسته بندی ها: 
-  تمامی دسته بندی های اصلی دیجی کالا
+  table(width="100%")
+    tbody
+      thead
+        th
+          p index
+        th
+          p LINK
+        th
+          p INFORMATION
+      tbody
+        tbody
+          tr
+            td.center.border
+              p 1
+            td.center.border
+              a(href="/categories") Categories
+            td.center.border
+              p Categories
+          //tr
+          //td.center.border
+          //  p 2
+          //td.center.border
+          //  a(href="/sub_category") SubCategories
+          //td.center.border
+          //  p Sub Categories

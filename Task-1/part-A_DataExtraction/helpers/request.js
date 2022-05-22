@@ -4,7 +4,7 @@ class Request {
     this.axios = require("axios");
   }
 
-  get = async function (sunUrl, params = {}) {
+  get = async function (sunUrl = "", params = {}) {
     await this.axios
       .get(this.mainUrl + sunUrl, params)
       .then((response) => {
@@ -15,11 +15,10 @@ class Request {
   };
 
   post = async function (subUrl, bodyData) {
-    absoluteUrl = this.mainUrl + subUrl;
 
     await this.axios({
       method: "post",
-      url: absoluteUrl,
+      url: this.mainUrl + subUrl,
       data: {
         bodyData,
       },

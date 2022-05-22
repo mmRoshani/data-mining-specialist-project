@@ -6,3 +6,21 @@ body {
 a {
   color: #00B7FF;
 }
+
+td. {
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+}
+
+.center.border {
+  text-align: center;
+  border: 1.5px solid black;
+}
+
+.img.small {
+  max-width: 10%;
+  max-height: 10%;
+}

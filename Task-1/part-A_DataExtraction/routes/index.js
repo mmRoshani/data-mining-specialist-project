@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "مسیرها" });
+  res.render("index", { title: "SITE TOTAL ROUTES" });
 });
 
 module.exports = router;
