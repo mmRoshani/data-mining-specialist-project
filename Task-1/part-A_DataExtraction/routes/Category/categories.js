@@ -9,6 +9,12 @@ router.get("/", async function (req, res, next) {
   res.render("categories", {title: "MAIN CATEGORIES",categories: categories});
 });
 
+router.get("/live.json", async function (req, res, next) {
+  request = new Request('https://api.digikala.com/v1/')
+  data = await request.get()
+  res.json(data.data.main_categories);
+});
+
 router.get("/electronic-devices", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
   data = await request.get("electronic-devices/");
