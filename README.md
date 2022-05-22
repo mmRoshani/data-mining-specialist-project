@@ -19,10 +19,12 @@
 ### :hammer_and_wrench: Languages and Tools :
 
 <div>
-  <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original-wordmark.svg" title="Python" alt="Python" width="40" height="40"/>&nbsp;
-  <img src="https://github.com/devicons/devicon/blob/master/icons/scala/scala-original-wordmark.svg" title="Scala" **alt="Scala" width="40" height="40"/>
-  <img src="https://spark.apache.org/images/spark-logo-rev.svg" title="Spark" **alt="Spark" width="40" height="40"/>
-  <img src="https://github.com/scrapy/scrapy/blob/master/artwork/scrapy-logo.jpg" title="Scrapy" **alt="Scrapy" width="100" height="40"/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original-wordmark.svg" title="Python" alt="Python" width="50" height="50"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/scala/scala-original-wordmark.svg" title="Scala" **alt="Scala" width="50" height="50"/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/nodejs/nodejs-original.svg" title="node-js" **alt="node-js" width="50" height="50"/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/express/express-original.svg" title="express" **alt="express" width="50" height="50"/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/mongodb/mongodb-original-wordmark.svg" title="mongodb" **alt="mongodb" width="50" height="50"/>
+
 </div>
 
 ---
