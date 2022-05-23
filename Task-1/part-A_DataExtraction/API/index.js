@@ -7,8 +7,8 @@ var mongoose = require("mongoose");
 const config = require("./config/db");
 const cors = require("cors");
 require("dotenv").config();
-var indexRouter = require("./routes/index");
-var categoryRouter = require("./routes/Category/categories");
+var indexRouter = require("./Controllers/index.Contoller");
+var categoryRouter = require("./Controllers/Category.Contoller/categories.Contoller");
 
 var app = express();
 const port = process.env.PORT || 4000;

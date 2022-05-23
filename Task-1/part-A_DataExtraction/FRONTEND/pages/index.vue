@@ -82,7 +82,7 @@
           <v-btn
             color="primary"
             nuxt
-            to="/inspire"
+            to="/category"
           >
             ادامه
           </v-btn>

@@ -1,60 +1,53 @@
-var express = require("express");
-var router = express.Router();
-var Request = require("../../helpers/request");
-var Category = require("../../models/Category");
-
+let express = require("express");
+let router = express.Router();
+let Request = require("../../helpers/request");
+let Category = require("../../models/Category");
+let categoryServices = require("../../Services/category.Services/category.Services");
 router.get("/", async function (req, res, next) {
-  categories = await Category.find({}).exec();
-  // res.send(categories)
-  res.json({ status: 200, data: categories });
+  res.json(await categoryServices.compareMain_DK_Route());
 });
 
-router.get("/live.json", async function (req, res, next) {
-  request = new Request("https://api.digikala.com/v1/");
-  data = await request.get();
-  res.json(data.data.main_categories);
-});
 
-router.get("/electronic-devices", async function (req, res, next) {
+router.get("/main/electronic-devices", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
   data = await request.get("electronic-devices/");
   res.json(data);
 });
 
-router.get("/vehicles", async function (req, res, next) {
+router.get("/main/vehicles", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
   data = await request.get("vehicles/");
   res.json(data);
 });
 
-router.get("/apparel", async function (req, res, next) {
+router.get("/main/apparel", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
   data = await request.get("apparel/");
   res.json(data);
 });
-router.get("/mother-and-child", async function (req, res, next) {
+router.get("/main/mother-and-child", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
   data = await request.get("mother-and-child/");
   res.json(data);
 });
 
-router.get("/food-beverage", async function (req, res, next) {
+router.get("/main/food-beverage", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
   data = await request.get("food-beverage/");
   res.json(data);
 });
 
-router.get("/personal-appliance", async function (req, res, next) {
+router.get("/main/personal-appliance", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
   data = await request.get("personal-appliance/");
   res.json(data);
 });
-router.get("/home-and-kitchen", async function (req, res, next) {
+router.get("/main/home-and-kitchen", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
   data = await request.get("home-and-kitchen/");
   res.json(data);
 });
-router.get("/rural-products", async function (req, res, next) {
+router.get("/main/rural-products", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
   data = await request.get("rural-products/");
   res.json(data);
