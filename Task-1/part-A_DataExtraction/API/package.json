@@ -8,7 +8,10 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^16.0.1",
     "express": "~4.16.1",

@@ -3,32 +3,34 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
+const config = require("./config/db");
+const cors = require("cors");
 require("dotenv").config();
-
 var indexRouter = require("./routes/index");
-var categoriesRouter = require("./routes/Category/categories");
+var categoryRouter = require("./routes/Category/categories");
 
 var app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
+app.use(cors());
+
 // Set Up database
-var mongoDB = 'mongodb://127.0.0.1/DK';
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(config.connectionString, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 var db = mongoose.connection;
-db.on('error',
-    console.error.bind(console, '**Error> MongoDB connection error:'));
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
+db.on(
+  "error",
+  console.error.bind(console, "**Error> MongoDB connection error:")
+);
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 // Router
 app.use("/", indexRouter);
-app.use("/categories", categoriesRouter);
+app.use("/category", categoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

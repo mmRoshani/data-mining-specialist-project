@@ -1,17 +1,17 @@
 var express = require("express");
 var router = express.Router();
 var Request = require("../../helpers/request");
-var Category = require("../../models/Category")
+var Category = require("../../models/Category");
 
 router.get("/", async function (req, res, next) {
-  categories = await  Category.find({}).exec()
+  categories = await Category.find({}).exec();
   // res.send(categories)
-  res.render("categories", {title: "MAIN CATEGORIES",categories: categories});
+  res.json({ status: 200, data: categories });
 });
 
 router.get("/live.json", async function (req, res, next) {
-  request = new Request('https://api.digikala.com/v1/')
-  data = await request.get()
+  request = new Request("https://api.digikala.com/v1/");
+  data = await request.get();
   res.json(data.data.main_categories);
 });
 
@@ -20,7 +20,6 @@ router.get("/electronic-devices", async function (req, res, next) {
   data = await request.get("electronic-devices/");
   res.json(data);
 });
-
 
 router.get("/vehicles", async function (req, res, next) {
   request = new Request("https://api.digikala.com/v1/categories/");
