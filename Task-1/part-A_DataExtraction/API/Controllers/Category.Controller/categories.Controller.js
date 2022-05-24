@@ -2,7 +2,7 @@ let express = require("express");
 let router = express.Router();
 let categoryServices = require("../../Services/category.Services/category.Extractor.Services");
 let subCategoryExtractor = require("../../Services/category.Services/subCategoies.Service/subCategories.Extractor.Service")
-
+let productExtractor = require("../../Services/product.Service/product.service")
 /**
  * @swagger
  * /category:
@@ -48,44 +48,39 @@ router.post("/main", async function (req, res, next) {
   }
   res.json(await subCategoryExtractor.subCategoriesExtractor(data));
 });
+/**
+ * @swagger
+ * /category/fetch_products:
+ *   get:
+ *     summary: Retrieve a list of products related to specific sub category.
+ *     description:
+ *     responses:
+ *       200:
+ *         description: Note that this should call by pagination.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                     type: object
+ *                     properties:
+ *                       code:
+ *                         type: string
+ *                         description: SubCategory code. find out on /category/main
+ *                         example: musicalinstruments
+ *                       page?:
+ *                         type: number
+ *                         description: the page number to show in nuxt.js frontend
+ *                         example: 6
+ */
+router.post("/fetch_products", async function (req, res, next) {
 
-// router.get("/main/vehicles", async function (req, res, next) {
-//   request = new Request("https://api.digikala.com/v1/categories/");
-//   data = await request.get("vehicles/");
-//   res.json("data");
-// });
-//
-// router.get("/main/apparel", async function (req, res, next) {
-//   request = new Request("https://api.digikala.com/v1/categories/");
-//   data = await request.get("apparel/");
-//   res.json("data");
-// });
-// router.get("/main/mother-and-child", async function (req, res, next) {
-//   request = new Request("https://api.digikala.com/v1/categories/");
-//   data = await request.get("mother-and-child/");
-//   res.json("data");
-// });
-//
-// router.get("/main/food-beverage", async function (req, res, next) {
-//   request = new Request("https://api.digikala.com/v1/categories/");
-//   data = await request.get("food-beverage/");
-//   res.json("data");
-// });
-//
-// router.get("/main/personal-appliance", async function (req, res, next) {
-//   request = new Request("https://api.digikala.com/v1/categories/");
-//   data = await request.get("personal-appliance/");
-//   res.json("data");
-// });
-// router.get("/main/home-and-kitchen", async function (req, res, next) {
-//   request = new Request("https://api.digikala.com/v1/categories/");
-//   data = await request.get("home-and-kitchen/");
-//   res.json("data");
-// });
-// router.get("/main/rural-products", async function (req, res, next) {
-//   request = new Request("https://api.digikala.com/v1/categories/");
-//   data = await request.get("rural-products/");
-//   res.json("data");
-// });
+  let data = req.body.data
+  if(!data || !data.code){
+    req.send("BAD_REQUEST")
+  }
+  res.json(await productExtractor.productExtractor(data));
+});
 
 module.exports = router;

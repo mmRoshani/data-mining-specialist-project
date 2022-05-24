@@ -20,7 +20,7 @@
         rounded="pill"
         bottom
       >
-        There is no "DK-ID" attribute for selected row
+        There is no "code" attribute for selected row
       </v-snackbar>
 
     </v-col>

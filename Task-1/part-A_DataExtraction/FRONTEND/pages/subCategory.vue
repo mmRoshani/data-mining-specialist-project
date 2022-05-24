@@ -20,6 +20,7 @@
           :loading="loading"
           loading-text="لطفا شکیبا باشید"
           :search="search"
+          @click:row="handleRowClick"
         ></v-data-table>
       </v-card>
 
@@ -75,7 +76,21 @@ export default {
         this.title = this.mainCategory.title_fa
         this.loading = false
       }).catch(err => console.log(err))
-    },
+    },handleRowClick(selectedRowData,selectedRow){
+      if (selectedRowData.code == null){
+        this.snackbar = true
+      }else {
+        this.$router.push({
+          name: "products",
+          query: {
+            page: 1,
+          },
+          params: {
+            subCategory: selectedRowData,
+          }
+        })
+      }
+    }
   }
 
 }
