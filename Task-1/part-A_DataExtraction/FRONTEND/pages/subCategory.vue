@@ -1,5 +1,30 @@
 <template>
+  <v-row>
+    <v-col class="text-center">
 
+      <v-card>
+        <v-card-title>
+          {{ title }}
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table
+          :headers="headers"
+          :items="subCategories"
+          :loading="loading"
+          loading-text="لطفا شکیبا باشید"
+          :search="search"
+        ></v-data-table>
+      </v-card>
+
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -7,10 +32,20 @@ export default {
   data() {
     return {
       name: "subCategory",
+      title:"loading...",
       loading: false,
       mainCategory: null,
-      mainCategoryRoute: null,
+      subCategories: [],
       error: null,
+      search: '',
+      headers: [
+        { text: 'modify_date', value: 'modify_date' },
+        { text: 'Link',sortable: false, value: 'url.uri' },
+        { text: 'products_count', value: 'products_count' },
+        { text: 'code', value: 'code' },
+        { text: 'title_fa',sortable: false, value: 'title_fa' },
+        { text: 'DK_ID', value: 'DK_ID' },
+      ],
     }
   },
   created() {
@@ -26,18 +61,19 @@ export default {
     async fetchData() {
       this.error = this.mainCategory = null
       this.loading = true
-      this.mainCategoryRoute = this.$route.params.mainCategory.url.uri
-      await this.$axios.get(
-        "/category" + this.mainCategoryRoute,
-        (err, mainCategory) => {
-        this.loading = false
+      this.mainCategory = this.$route.params.mainCategory
+
+      await this.$axios.post(
+        "/category/main",
+        {"data": {"code": this.mainCategory.code, "page": 5}},
+        (err, _) => {
         if (err) {
           this.error = err.toString()
-        } else {
-          this.mainCategory = mainCategory
         }
-      }).then(data=>{
-        console.log(data)
+      }).then(response=>{
+        this.subCategories = response.data
+        this.title = this.mainCategory.title_fa
+        this.loading = false
       }).catch(err => console.log(err))
     },
   }

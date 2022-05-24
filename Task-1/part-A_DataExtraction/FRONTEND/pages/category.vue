@@ -6,6 +6,8 @@
           :headers="headers"
           :items="categories"
           :items-per-page="10"
+          :loading="loading"
+          loading-text="لطفا شکیبا باشید"
           class="elevation-1 mt-4"
           @click:row="handleRowClick"
         ></v-data-table>
@@ -18,7 +20,7 @@
         rounded="pill"
         bottom
       >
-        There is no "DK-id" attribute for selected row
+        There is no "DK-ID" attribute for selected row
       </v-snackbar>
 
     </v-col>
@@ -31,12 +33,13 @@ export default {
   data () {
     return {
       name: 'CategoryPage',
+      loading: true,
       headers: [
-        { text: 'DK-link',sortable: false, value: 'url.uri' },
+        { text: 'modify date', value: 'modify_date' },
         { text: 'local link',sortable: false, value: 'url.uri' },
         { text: 'code (string)',sortable: false, value: 'code' },
         { text: 'title',sortable: false, value: 'title_fa' },
-        { text: 'DK-id (int)', value: 'DK_id' },
+        { text: 'DK-ID (int)', value: 'DK_ID' },
       ],
       categories: [],
       snackbar: false,
@@ -48,12 +51,13 @@ export default {
       await this.$axios.$get('/category')
         .then(data => {
           this.categories = data
+          this.loading = false
         })
         .catch(err => console.log(err))
 
     },
     handleRowClick(selectedRowData,selectedRow){
-      if (selectedRowData.DK_id == null){
+      if (selectedRowData.DK_ID == null){
         this.snackbar = true
       }else {
         this.$router.push({

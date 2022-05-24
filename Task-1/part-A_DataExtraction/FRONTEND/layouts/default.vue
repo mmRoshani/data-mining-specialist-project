@@ -9,6 +9,29 @@
       <v-icon :color="accountCharge()">mdi-battery</v-icon>
       <v-spacer/>
 
+      <v-btn
+        x-small
+        class="ma-1"
+        outlined
+        fab
+        color="teal"
+        @click="$router.go(+1)"
+      >
+        <v-icon>mdi-arrow-right-bold</v-icon>
+      </v-btn>
+      <v-btn
+        x-small
+        class="ma-1"
+        outlined
+        fab
+        color="orange"
+        @click="$router.go(-1)"
+      >
+        <v-icon>mdi-arrow-left-bold</v-icon>
+      </v-btn>
+
+      <v-spacer/>
+
       <v-toolbar-title v-text="title" />
     </v-app-bar>
     <v-main>
@@ -76,6 +99,23 @@ export default {
           title: 'دسته بندی اصلی',
           to: '/category'
         }
+      ],
+      routes: [
+        {
+          text: 'Dashboard',
+          disabled: false,
+          href: 'breadcrumbs_dashboard',
+        },
+        {
+          text: 'Link 1',
+          disabled: false,
+          href: 'breadcrumbs_link_1',
+        },
+        {
+          text: 'Link 2',
+          disabled: true,
+          href: 'breadcrumbs_link_2',
+        },
       ],
       miniVariant: false,
       right: true,

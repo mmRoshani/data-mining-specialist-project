@@ -1,16 +1,17 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var mongoose = require("mongoose");
-const config = require("./config/db");
+let createError = require("http-errors");
+let express = require("express");
+let path = require("path");
+let logger = require("morgan");
+let mongoose = require("mongoose");
+const config = require("./config/db.config");
+let swaggerSpec = require("./swagger.config")
+const swaggerUi = require('swagger-ui-express');
 const cors = require("cors");
 require("dotenv").config();
-var indexRouter = require("./Controllers/index.Contoller");
-var categoryRouter = require("./Controllers/Category.Contoller/categories.Contoller");
+let indexRouter = require("./Controllers/index.Controller");
+let categoryRouter = require("./Controllers/Category.Controller/categories.Controller");
 
-var app = express();
+let app = express();
 const port = process.env.PORT || 4000;
 app.use(cors());
 
@@ -28,9 +29,12 @@ db.on(
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// Router
+
+
 app.use("/", indexRouter);
+
 app.use("/category", categoryRouter);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -47,6 +51,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
 
 app.listen(port, () => {
   console.log(`Application listening on port: ${port}`);

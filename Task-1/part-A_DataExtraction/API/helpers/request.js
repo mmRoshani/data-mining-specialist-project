@@ -4,11 +4,11 @@ class Request {
     this.axios = require("axios");
   }
 
-  get = async function (sunUrl = "", params = {}) {
+  get = async function (subUrl = "", params = {}) {
     await this.axios
-      .get(this.mainUrl + sunUrl, params)
+      .get(this.mainUrl + subUrl, params)
       .then((response) => {
-        this.data = response.data;
+        this.data = response;
       })
       .catch((err) => console.log(err));
     return this.data;
