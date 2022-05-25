@@ -60,7 +60,9 @@ async function productExtractor(data) {
 
   await _productAdder()
     .then(async (data) => {
-      result = await Product.find({})
+      result = await Product.find({
+        subCategory: _subCategory,
+      })
         .sort({ DK_ID: +1 })
         .limit(page * 20)
         .exec();

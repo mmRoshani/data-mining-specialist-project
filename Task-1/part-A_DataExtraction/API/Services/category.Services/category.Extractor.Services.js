@@ -5,6 +5,7 @@ let SubRoutesEnum = require("../../DataStructures/DK_SubRoutes.enum");
 async function mainCategoriesExtractor() {
   let categories = [];
   let result;
+
   request = new Request(SubRoutesEnum.LANDING);
   requestResult = await request.get();
   categories = requestResult.data.data.main_categories.categories;

@@ -85,9 +85,6 @@ export default {
       } else {
         this.$router.push({
           name: "products",
-          query: {
-            page: 1,
-          },
           params: {
             subCategory: selectedRowData,
           },
