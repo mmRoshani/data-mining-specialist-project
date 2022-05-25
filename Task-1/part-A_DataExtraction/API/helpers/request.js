@@ -15,7 +15,6 @@ class Request {
   };
 
   post = async function (subUrl, bodyData) {
-
     await this.axios({
       method: "post",
       url: this.mainUrl + subUrl,

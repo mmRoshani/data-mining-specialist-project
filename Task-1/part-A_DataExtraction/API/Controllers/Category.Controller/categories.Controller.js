@@ -1,8 +1,8 @@
 let express = require("express");
 let router = express.Router();
 let categoryServices = require("../../Services/category.Services/category.Extractor.Services");
-let subCategoryExtractor = require("../../Services/category.Services/subCategoies.Service/subCategories.Extractor.Service")
-let productExtractor = require("../../Services/product.Service/product.service")
+let subCategoryExtractor = require("../../Services/category.Services/subCategoies.Service/subCategories.Extractor.Service");
+let productExtractor = require("../../Services/product.Service/product.service");
 /**
  * @swagger
  * /category:
@@ -41,10 +41,9 @@ router.get("/", async function (req, res, next) {
  *                         example: 5
  */
 router.post("/main", async function (req, res, next) {
-
-  let data = req.body.data
-  if(!data || !data.code){
-    req.send("BAD_REQUEST")
+  let data = req.body.data;
+  if (!data || !data.code) {
+    req.send("BAD_REQUEST");
   }
   res.json(await subCategoryExtractor.subCategoriesExtractor(data));
 });
@@ -75,10 +74,9 @@ router.post("/main", async function (req, res, next) {
  *                         example: 6
  */
 router.post("/fetch_products", async function (req, res, next) {
-
-  let data = req.body.data
-  if(!data || !data.code){
-    req.send("BAD_REQUEST")
+  let data = req.body.data;
+  if (!data || !data.code) {
+    req.send("BAD_REQUEST");
   }
   res.json(await productExtractor.productExtractor(data));
 });

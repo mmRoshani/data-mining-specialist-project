@@ -4,8 +4,8 @@ let path = require("path");
 let logger = require("morgan");
 let mongoose = require("mongoose");
 const config = require("./config/db.config");
-let swaggerSpec = require("./swagger.config")
-const swaggerUi = require('swagger-ui-express');
+let swaggerSpec = require("./swagger.config");
+const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
 require("dotenv").config();
 let indexRouter = require("./Controllers/index.Controller");
@@ -30,11 +30,10 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
 app.use("/", indexRouter);
 
 app.use("/category", categoryRouter);
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -51,7 +50,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
 
 app.listen(port, () => {
   console.log(`Application listening on port: ${port}`);
