@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+let Schema = mongoose.Schema;
 
-var SubCategories = new Schema({
+let SubCategories = new Schema({
     "DK_ID": Number,
     "title_fa": String,
     "title_en": String,

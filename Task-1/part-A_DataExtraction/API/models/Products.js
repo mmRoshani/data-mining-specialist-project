@@ -1,9 +1,9 @@
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 const stream = require("stream");
 
-var Schema = mongoose.Schema;
+let Schema = mongoose.Schema;
 
-var Products = new Schema({
+let Products = new Schema({
     "DK_ID": Number,
     "title_fa": String,
     "title_en": String,
@@ -11,6 +11,7 @@ var Products = new Schema({
         "base": String | null,
         "uri": String
     },
+    "cpc": Object | null,
     "image": {
         "storage_ids": Object | null,
         "url": Array | null,
@@ -37,6 +38,15 @@ var Products = new Schema({
         "lead_time": Number | null,
         "rank": Number | null,
         "rate": Number | null,
+        warranty: {
+            "DK_ID": Number,
+            "title_fa": String,
+            "title_en": String | null,
+        } | null,
+        seller: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "sellers"
+        } | null,
         "statistics": String | Number | null,
         "status": stream | null,
         "properties": {
@@ -52,6 +62,10 @@ var Products = new Schema({
             "cash_back": Number | null,
             "is_general_location_jet_eligible": Boolean | null
         } | null,
+        "size": {
+            "id": Number,
+            "title": String
+        },
         "color": {
             "id": Number | null,
             "title": String |null,
@@ -96,18 +110,11 @@ var Products = new Schema({
     },
     "badges": Array | null,
     "colors": Array | null,
-    subCategory: {
+    "subCategory": {
         type: mongoose.Schema.Types.ObjectId,
         ref: "sub_categories"
     },
-    warranty: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "warranties"
-    },
-    seller: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "sellers"
-    },
+    "DK_Provider": Boolean,
     modify_date: Date,
 
 });
