@@ -11,7 +11,7 @@ router.get("/", async function (req, res, next) {
               $group: {
                   _id: {
                       $dateToString: {
-                          format: "%Y-%m-%d (%H:%M:%S o'clock)",
+                          format: "%Y-%m-%d (%H o'clock)",
                           date: "$modify_date"
                       }
                   },

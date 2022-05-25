@@ -54,7 +54,7 @@ async function productExtractor(data){
 
     await _productAdder()
         .then(async data => {
-            result = await Product.find({}).sort({'DK_ID': +1}).limit((page*10)).exec()
+            result = await Product.find({}).sort({'DK_ID': +1}).limit((page*20)).exec()
         })
         .catch(err=> {
             result = err
