@@ -3,10 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon index.js"
+    "build" : "babel ./*.js — out-file ./dist/*.js",
+    "dev": "nodemon — exec babel-node index.js"
   },
   "dependencies": {
+    "@babel/core": "^7.18.2",
+    "@babel/node": "^7.17.10",
+    "@babel/preset-env": "^7.18.2",
     "axios": "^0.27.2",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
@@ -16,7 +19,6 @@
     "dotenv": "^16.0.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "jade": "~1.11.0",
     "mongoose": "^6.3.4",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.16",
