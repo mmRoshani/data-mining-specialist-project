@@ -1,77 +1,16 @@
-version: '3'
+version: "3.2"
 services:
-  # my-ui:
-  #   container_name: my-ui
-  #   build: ./my-ui
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - my-api
-  #   networks:
-  #     - test-network
-
-  # my-api:
-  #   container_name: my-api
-  #   restart: always
-  #   build:
-  #     context: my-api
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - rabbitmq
-  #     - mp-redis
-  #   networks:
-  #     - test-network
-
-  DK_rabbitmq:
-    container_name: DK_rabbitmq
-    image: rabbitmq:management
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: 'rabbitmq'
     ports:
-      - "5672:5672"
-      - "15672:15672"
-    restart: always
-    networks:
-      - test-network
-
-  # mp-redis:
-  #   container_name: mp-redis
-  #   image: redis:5
-  #   ports:
-  #     - "6379:6379"
-  #   restart: always
-  #   networks:
-  #     - test-network
-
-  DK_mongodb:
-    container_name: DK_mongodb
-    image: mongo
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: wroot
-      MONGO_INITDB_DATABASE: DK
-      MONGO_DATA_DIR: /data/db
-      MONGO_LOG_DIR: /dev/null
+      - 5673:5672
+      - 15673:15672
     volumes:
-      - mongo-data:/data/db
-    ports:
-      - "28018:27017"
-    command: mongod --logpath=/dev/null
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
-      - test-network
-
-  mongo-express:
-    image: mongo-express
-    restart: unless-stopped
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: wroot
-      ME_CONFIG_MONGODB_URL: mongodb://root:rootpassword@localhost:27018/?authMechanism=DEFAULT
-
-volumes:
-  mongo-data:
+      - rabbitmq_nodejs
 networks:
-  test-network:
+  rabbitmq_nodejs:
+    driver: bridge
