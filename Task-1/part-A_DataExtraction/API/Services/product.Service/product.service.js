@@ -46,8 +46,7 @@ async function productExtractor(data) {
   (async () => {
     try {
       const _message_comment = {
-        task: "ExtractProduct",
-        by: "subCategory",
+        task: "ExtractProductComments",
         data: JSON.stringify({ subCategoryId: _subCategory._id }),
         data_type: "subCategory",
       };
