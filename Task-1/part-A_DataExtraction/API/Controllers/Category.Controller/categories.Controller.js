@@ -1,6 +1,6 @@
 let express = require("express");
 let router = express.Router();
-let categoryServices = require("../../Services/category.Services/category.Extractor.Services");
+let categoryServices = require("../../Services/category.Services/category.Services");
 let subCategoryExtractor = require("../../Services/category.Services/subCategoies.Service/subCategories.Extractor.Service");
 let productExtractor = require("../../Services/product.Service/product.service");
 /**

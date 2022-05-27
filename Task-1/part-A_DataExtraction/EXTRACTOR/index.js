@@ -8,6 +8,8 @@ let logger = require("morgan");
 const config = require("./config/db.config");
 let indexRouter = require("./Controllers/index.Controller");
 let categoryRouter = require("./Controllers/Category.Controller/categories.Controller");
+let consumer = require("./messaging/consumer.messaging");
+let publisherEnum = require("./DataStructures/publisher.enum");
 
 const app = express();
 
@@ -44,7 +46,15 @@ app.use(function (err, req, res, next) {
   res.json({ status: 500, error: "Internal server error" });
 });
 
+/**
+ *
+ * INITIAL CONSUMERS
+ *
+ */
+
 const port = 4500;
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Extractor server listen on port ${port}`);
+  await consumer(publisherEnum.QUEUE_PRODUCT);
+  await consumer(publisherEnum.QUEUE_COMMENT);
 });

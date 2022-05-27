@@ -6,7 +6,7 @@ async function mainCategoriesExtractor() {
   let categories = [];
   let result;
 
-  request = new Request(SubRoutesEnum.LANDING);
+  request = new Request(SubRoutesEnum.PRODUCT_COMMENTS);
   requestResult = await request.get();
   categories = requestResult.data.data.main_categories.categories;
 
