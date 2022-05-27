@@ -42,6 +42,10 @@ let Comment = new Schema({
     } | null,
   advantages: [String | null],
   disadvantages: [String | null],
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "products",
+  },
   subCategory: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "sub_categories",

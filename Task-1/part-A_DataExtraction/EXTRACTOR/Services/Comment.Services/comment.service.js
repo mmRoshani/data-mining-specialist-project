@@ -1,140 +1,123 @@
 let SubCategory = require("../../models/SubCategory");
 let Comment = require("../../models/Comment");
 let Product = require("../../models/Products");
+let RatingOnProductByComments = require("../../models/ProductRationByComments");
 let sellerServices = require("../../Services/seller.Services.js/seller.service");
 let Request = require("../../helpers/request");
 let SubRoutesEnum = require("../../DataStructures/DK_SubRoutes.enum");
 
 async function commentExtractor(msg) {
   let messageData = JSON.parse(JSON.parse(msg.content.toString()).data);
-  let byAttribute = JSON.parse(msg.content.toString());
-  console.log(byAttribute);
-  if (byAttribute.by === "subCategory") {
-    const subCategoryId = messageData.subCategoryId;
-    const fetchedSubCategory = SubCategory.findById(subCategoryId).exec();
-    if (!fetchedSubCategory) console.log("subCategory not found");
-    let relatedProducts = await Product.find({ subCategory: subCategoryId });
-    if (relatedProducts.length === 0)
-      console.log("no related products to sub category");
-    console.log(`CommentExtractionForSubCategory: ${subCategoryId}`);
-
-    const _commentExtractor = async () => {
-      await relatedProducts.forEach(async (product) => {
-        let page = 1;
-        let fetchedData = {};
-        let fetchedComments = [];
-        let fetchedMediaComments = [];
-        //pager: total page and item count
-        let request = new Request(SubRoutesEnum.PRODUCT_COMMENTS);
-        let pager;
-        try {
-          reqResults = await request.get(
-            `${product.DK_ID}/comments/?page=${page}`
-          );
-          pager = reqResults.data.data.pager;
-        } catch (error) {
-          console.log(error.message);
-        }
-        if (!pager || pager.total_items === 0) {
-          console.log("No comments on subCategory products");
-        } else {
-          const relatedCommentCount = await Comment.countDocuments({
-            subCategory: subCategoryId,
-          }).exec();
-          // gather all product related comments
-          for (page; page <= page.total_pages; page++) {
-            fetchedData = Object.assign(
-              {},
-              fetchedData,
-              await request.get(`${product.DK_ID}/comments/?page=${page}`).data
-                .data
-            );
-          }
-
-          //fill comments & mediaComments
-          fetchedComments = fetchedData.comments;
-          fetchedMediaComments = fetchedData.media_comments;
-          // save or pass product related comments
-          const _commentSaver = async function () {
-            await fetchedComments.forEach(async function (_comment) {
-              let commentExist = await Comment.findOne({
-                DK_ID: _comment.id,
-              })
-                .exec()
-                .catch(function (err) {
-                  console.log(err);
-                });
-              if (!commentExist) {
-                let newComment = new Comment({
-                  modify_date: Date.now(),
-                  DK_ID: _comment.id,
-                  seller: await sellerServices.sellerExistence(
-                    _comment.purchased_item.seller
-                  ),
-                  subCategory: subCategoryId,
-                  ..._comment,
-                });
-
-                await newComment.save().catch(function (err) {
-                  console.log(err);
-                });
-              }
-            });
-            await fetchedMediaComments.forEach(async function (_comment) {
-              let commentExist = await Comment.findOne({
-                DK_ID: _comment.id,
-              })
-                .exec()
-                .catch(function (err) {
-                  console.log(err);
-                });
-              if (!commentExist) {
-                let mediaComment = new Comment({
-                  modify_date: Date.now(),
-                  DK_ID: _comment.id,
-                  seller: await sellerServices.sellerExistence(
-                    _comment.purchased_item.seller
-                  ),
-                  subCategory: subCategoryId,
-                  ..._comment,
-                });
-
-                await mediaComment.save().catch(function (err) {
-                  console.log(err);
-                });
-              }
-            });
-          };
-
-          if (
-            pager.total_items > relatedCommentCount &&
-            fetchedComments &&
-            fetchedComments
-          ) {
-            await _commentSaver()
-              .then(function (_) {})
-              .catch(function (err) {
-                console.log(err);
-              });
-          } else {
-            console.log(
-              "No new comments found on related subCategory product's"
-            );
-          }
-        }
-      });
-    };
-    await _commentExtractor()
-      .then(function (_) {
-        console.log(`EndExtractionOfCommentForSubCategory: ${subCategoryId}`);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
+  const subCategoryId = messageData.subCategoryId;
+  const fetchedSubCategory = await SubCategory.findById(subCategoryId).exec();
+  if (!fetchedSubCategory) console.log("subCategory not found");
+  const products = await Product.find({
+    subCategory: fetchedSubCategory._id,
+  }).exec();
+  if (!products) {
+    console.log(
+      `There must be at least one product on subCategory: ${fetchedSubCategory._id}`
+    );
   } else {
+    console.log(
+      `Job started to fetch all ${fetchedSubCategory.code} subCategory comments`
+    );
+    await products.forEach(async (product) => {
+      await productCommentExtractor(product._id);
+    });
   }
 }
+const productCommentExtractor = async function (productId) {
+  let commentsOnProduct = [];
+  let mediaCommentsOnProduct = [];
+  let ratingOnProductByComments = [];
+  let product = await Product.findById(productId).exec();
+  if (!product) console.log("No product found!");
+  let request = new Request(SubRoutesEnum.PRODUCT_COMMENTS);
+  let reqResults = await request.get(`${product.DK_ID}/comments/?page=1`);
+  let pager;
+  try {
+    pager = reqResults.data.data.pager;
+  } catch (error) {}
+  if (!pager || pager.total_pages === 0) {
+    console.log(`No comment available on product: ${productId}`);
+  } else {
+    console.log("START TO FETCHING COMMENT");
+    let total_pages = pager.total_pages;
 
+    (async function loop() {
+      let i = 1;
+      for (i; i <= total_pages; i++) {
+        let _fetchData = await request.get(
+          `${product.DK_ID}/comments/?page=${i}`
+        );
+        ratingOnProductByComments = _fetchData.data.data.ratings;
+        commentsOnProduct = commentsOnProduct.concat(
+          _fetchData.data.data.comments
+        );
+        mediaCommentsOnProduct = mediaCommentsOnProduct.concat(
+          _fetchData.data.data.media_comments
+        );
+      }
+    })();
+
+    await _saveRatingOnProduct(ratingOnProductByComments, product);
+    await _commentSaver(commentsOnProduct, product)
+      .then((_) => {
+        console.log(`Total comments fetch for product: ${product.DK_ID}`);
+      })
+      .catch((err) => {
+        console.log(`error on fetching comments for product: ${product.DK_ID}`);
+      });
+  }
+};
+
+const _commentSaver = async (fetchCommentArray, subCategoryId, product) => {
+  await fetchCommentArray.forEach(async function (comment) {
+    _commentExist = await Comment.findOne({ DK_ID: comment.id }).exec();
+    if (!_commentExist) {
+      let newComment = await Comment({
+        modify_date: Date.now(),
+        DK_ID: comment.id,
+        seller: await sellerServices.sellerExistence(
+          comment.purchased_item.seller
+        ),
+        product: product._id,
+        subCategory: product.subCategoryId,
+        ...comment,
+      });
+      await newComment
+        .save()
+        .exec()
+        .then((_) => console.log("COMMENT SAVED"))
+        .catch((err) => console.log(err));
+    }
+  });
+};
+const _saveRatingOnProduct = async (ratingArray, product) => {
+  if (!ratingArray) {
+    console.log(`no rating available on ${product._id} productId`);
+  } else {
+    await ratingArray.forEach(async (rate) => {
+      let _fetchRate = await RatingOnProductByComments.findOne({
+        id: rate.id,
+      }).exec();
+      if (!_fetchRate) {
+        let _newRate = new RatingOnProductByComments({
+          modify_date: Date.now(),
+          product: product._id,
+          subCategory: product.subCategory,
+          ...rate,
+        });
+        await _newRate
+          .save()
+          .exec()
+          .catch((err) => console.log(err));
+      }
+    });
+  }
+};
 module.exports = {
   commentExtractor,
+  productCommentExtractor,
 };

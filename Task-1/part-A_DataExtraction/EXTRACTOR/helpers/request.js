@@ -10,7 +10,8 @@ class Request {
       .then((response) => {
         this.data = response;
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(`Axios error with code: ${err.code}`));
+
     return this.data;
   };
 
