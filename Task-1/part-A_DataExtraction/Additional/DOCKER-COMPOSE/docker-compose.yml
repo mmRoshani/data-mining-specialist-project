@@ -1,14 +1,42 @@
-version: '3.7'
+version: "3.2"
 services:
-  mongodb_container:
-    image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: 'rabbitmq'
     ports:
-      - 27017:27017
+      - 5673:5672
+      - 15673:15672
     volumes:
-      - mongodb_data_container:/data/db
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - rabbitmq_nodejs
+  mongo:
+    build:
+      context: .
+      dockerfile: ./mongo/Dockerfile
+    container_name: DK_mongo
+    environment:
+      MONGO_INITDB_DATABASE: "DK"
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/app_mongo_root_password
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_PASSWORD_FILE: /run/secrets/app_mongo_password
+      MONGO_USER: "DK_user"
+    secrets:
+      - app_mongo_password
+      - app_mongo_root_password
+    ports:
+      - "28018:27017"
+    volumes:
+      - mongo:/data/db
+secrets:
+  app_mongo_password:
+    file: ./secrets/app_mongo_password.txt
+  app_mongo_root_password:
+    file: ./secrets/app_mongo_root_password.txt
 
 volumes:
-  mongodb_data_container:
+  mongo:
+networks:
+  rabbitmq_nodejs:
+    driver: bridge
