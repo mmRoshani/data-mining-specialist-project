@@ -43,22 +43,6 @@ async function productExtractor(data) {
     } catch {}
   })();
 
-  (async () => {
-    try {
-      const _message_comment = {
-        task: "ExtractProductComments",
-        data: JSON.stringify({ subCategoryId: _subCategory._id }),
-        data_type: "subCategory",
-      };
-      await publisher(
-        rabbitQmEnum.EXCHANGE,
-        rabbitQmEnum.QUEUE_COMMENT,
-        rabbitQmEnum.ROUTING_COMMENT,
-        JSON.stringify(_message_comment)
-      );
-    } catch {}
-  })();
-
   return result;
 }
 

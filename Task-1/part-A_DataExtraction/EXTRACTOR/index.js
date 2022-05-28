@@ -57,4 +57,5 @@ app.listen(port, async () => {
   console.log(`Extractor server listen on port ${port}`);
   await consumer(publisherEnum.QUEUE_PRODUCT);
   await consumer(publisherEnum.QUEUE_COMMENT);
+  await consumer(publisherEnum.QUEUE_ALL_COMMENT_SUB_CATEGORY);
 });

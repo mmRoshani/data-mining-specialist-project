@@ -7,6 +7,9 @@ class PublisherEnum {
   static #_QUEUE_COMMENT = "DK.COMMENT";
   static #_ROUTING_COMMENT = "COMMENT";
 
+  static #_QUEUE_ALL_COMMENT_SUB_CATEGORY = "DK.ALL_COMMENT";
+  static #_ROUTING_ALL_COMMENT_SUB_CATEGORY = "ALL_COMMENTS";
+
   static get EXCHANGE() {
     return this.#_EXCHANGE;
   }
@@ -22,6 +25,13 @@ class PublisherEnum {
   }
   static get ROUTING_COMMENT() {
     return this.#_ROUTING_COMMENT;
+  }
+
+  static get QUEUE_ALL_COMMENT_SUB_CATEGORY() {
+    return this.#_QUEUE_ALL_COMMENT_SUB_CATEGORY;
+  }
+  static get ROUTING_ALL_COMMENT_SUB_CATEGORY() {
+    return this.#_ROUTING_ALL_COMMENT_SUB_CATEGORY;
   }
 }
 

@@ -26,6 +26,8 @@ const consumer = async function (queue) {
           .productExtractor(msg)
           .catch((err) => console.log(err));
       if (_queue === publishEnum.QUEUE_COMMENT)
+        await commentService.productCommentExtractor(msg);
+      if (_queue === publishEnum.QUEUE_ALL_COMMENT_SUB_CATEGORY)
         await commentService.commentExtractor(msg);
       await channel.ack(msg);
     },

@@ -10,7 +10,8 @@ const cors = require("cors");
 require("dotenv").config();
 let indexRouter = require("./Controllers/index.Controller");
 let categoryRouter = require("./Controllers/Category.Controller/categories.Controller");
-
+let productController = require("./Controllers/product.Controller");
+let subCategoryController = require("./Controllers/Category.Controller/subCategory.controller");
 let app = express();
 const port = process.env.PORT || 4000;
 app.use(cors());
@@ -31,8 +32,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", indexRouter);
-
 app.use("/category", categoryRouter);
+app.use("/product", productController);
+app.use("/sub_category", subCategoryController);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler
@@ -46,7 +48,7 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
   res.status(err.status || 500);
-  res.json({"status": 500, "error": "Internal server error"});
+  res.json({ status: 500, error: "Internal server error" });
 });
 
 app.listen(port, () => {
